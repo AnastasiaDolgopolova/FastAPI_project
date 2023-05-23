@@ -1,10 +1,11 @@
 import time
 
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi_cache.decorator import cache
 from sqlalchemy import select, insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from fastapi_cache.decorator import cache
+from auth.base_config import current_user
 from database import get_async_session
 from operations.models import operation
 from operations.schemas import OperationCreate
@@ -46,3 +47,8 @@ async def add_specific_operations(new_operation: OperationCreate, session: Async
 	await session.execute(stmt)
 	await session.commit()
 	return {"status": "success"}
+
+@router.get("/main")
+async def main(session: AsyncSession = Depends(get_async_session)):
+	result = await session.execute(select(1))
+	return result.all()
