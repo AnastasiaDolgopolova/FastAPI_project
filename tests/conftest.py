@@ -34,6 +34,9 @@ async def prepare_database():
     yield
     async with engine_test.begin() as conn:
         await conn.run_sync(metadata.drop_all)
+    # async with engine_test.begin() as conn:
+    #     await conn.run_sync(metadata.drop_all)
+    # закомментировать, чтоб не очищалась тестовая БД
 
 # SETUP
 @pytest.fixture(scope='session')
